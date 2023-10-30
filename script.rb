@@ -25,29 +25,70 @@ display_gameboard(gameboard.board)
       gameboard.board[turn].unshift(guess_sequence)
       display_gameboard(gameboard.board)
       feedback_array = codemaker.guess_feedback(guess_sequence, master_copy)
-      binding.pry
       gameboard.board[turn][1][:codekey] = feedback_array
+      binding.pry
       display_gameboard(gameboard.board)
+      if feedback_array == ["X", "X", "X", "X"] && codebreaker.type == "human"
+        puts "Congratulations!  You guessed the correct sequence!  You won against the Codemaster!"
+        puts "W---(^_^)---W"
+        sleep 2
+        puts "Do you want to start a new game?"
+        loop do
+        game_choice = gets
+        game_choice = game_choice.chomp.downcase
+        if game_choice == "yes" || game_choice == "y"
+            puts "Yay!  You chose to play a new game!"
+            sleep 2
+            game()
+        elsif game_choice == "no" || game_choice == "n"
+            puts "Thank you for playing Mastermind.  Have a great day!"
+            exit
+        else
+            puts "Do you want to play again?  Type yes, no, y or n."
+        end
+      end
 
-
-
-
+      end
       turn += 1
     end
-
+    if codemaker.type == "computer"
+    puts "I'm sorry, you lost against your opponent!"
+    puts "m---(v_v)---m"
+    sleep 2
+    puts "Don't give up!  Do you want to try again?"
+    loop do
+    game_choice = gets
+    game_choice = game_choice.chomp.downcase
+    if game_choice == "yes" || game_choice == "y"
+        puts "Yay!  You chose to play a new game!"
+        sleep 2
+        game()
+    elsif game_choice == "no" || game_choice == "n"
+        puts "Thank you for playing Mastermind.  Have a great day!"
+        exit
+    else
+        puts "Do you want to play again?  Type yes, no, y or n."
+    end
+  end
+  end
 end
 
 
 
 class CodemakerHuman
-  attr_accessor :name, :choices
+  attr_accessor :choices, :type
   def initialize()
     @choices = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    @type = "human"
   end
 end
 
 class CodemakerComputer < CodemakerHuman
-
+  attr_accessor :choices, :type
+  def initialize()
+    @choices = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    @type = "computer"
+  end
   def make_code_sequence()
     code_array = []
     i = 0
@@ -94,9 +135,10 @@ class CodemakerComputer < CodemakerHuman
 end
 
 class CodebreakerHuman
-  attr_accessor :name, :choices
+  attr_accessor :choices, :type
   def initialize()
     @choices = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    @type = "human"
   end
 
   def guess()
@@ -138,6 +180,11 @@ class CodebreakerHuman
 end
 
 class CodebreakerComputer < CodebreakerHuman
+  attr_accessor :choices, :type
+  def initialize()
+    @choices = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    @type = "computer"
+  end
 
 end
 
