@@ -18,11 +18,19 @@ display_gameboard(gameboard.board)
     master_sequence = codemaker.make_code_sequence()
     turn = 0
     until turn == 12
+      master_copy = master_sequence.clone
       display_gameboard(gameboard.board)
       guess_sequence = codebreaker.guess()
       gameboard.board[turn].shift
       gameboard.board[turn].unshift(guess_sequence)
       display_gameboard(gameboard.board)
+      feedback_array = codemaker.guess_feedback(guess_sequence, master_copy)
+      binding.pry
+      gameboard.board[turn][1][:codekey] = feedback_array
+      display_gameboard(gameboard.board)
+
+
+
 
       turn += 1
     end
@@ -49,6 +57,36 @@ class CodemakerComputer < CodemakerHuman
       i += 1
     end
     code_array
+  end
+
+  def guess_feedback(guess_array, master_array)
+    feedback_array = ['-', '-', '-', '-']
+    master_array_copy = master_array.clone
+    i = 3
+    while i >= 0
+      if guess_array[i] == master_array_copy[i]
+        feedback_array.pop
+        feedback_array.unshift("X")
+        master_array_copy.delete_at(i)
+        i -= 1
+      else
+        i -= 1
+      end
+    end
+      j = 0
+      while j < master_array_copy.length
+        if guess_array.include?(master_array_copy[j])
+          feedback_array.insert(feedback_array.index('-'), "O")
+          feedback_array.delete_at(feedback_array.index('-'))
+          j += 1
+        else
+          j += 1
+        end
+      end
+    puts "Please review the feedback from your opponent carefully.  Remember an 'X' means you have the right color in the right position, and an 'O' means you have the right color in the wrong position."
+    p feedback_array
+    sleep 2
+    feedback_array
   end
 
 
@@ -96,7 +134,6 @@ class CodebreakerHuman
       end
     end
     guess_array
-    p guess_array
   end
 end
 
