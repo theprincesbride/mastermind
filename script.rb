@@ -26,7 +26,6 @@ display_gameboard(gameboard.board)
       display_gameboard(gameboard.board)
       feedback_array = codemaker.guess_feedback(guess_sequence, master_copy)
       gameboard.board[turn][1][:codekey] = feedback_array
-      binding.pry
       display_gameboard(gameboard.board)
       if feedback_array == ["X", "X", "X", "X"] && codebreaker.type == "human"
         puts "Congratulations!  You guessed the correct sequence!  You won against the Codemaster!"
@@ -81,6 +80,43 @@ class CodemakerHuman
     @choices = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
     @type = "human"
   end
+
+  def make_code_sequence()
+    code_array = []
+    puts "You will put together the master code sequence.  Please choose your first color: red, orange, yellow, green, blue or purple."
+    i = 0
+      until i == 4
+        color_choice = gets
+        color_choice = color_choice.chomp.downcase
+        if @choices.include?(color_choice) && i == 0
+          puts "You chose #{color_choice} as your first color."
+          code_array.push(color_choice)
+          p code_array
+          puts "Please choose your next color."
+          i += 1
+        elsif @choices.include?(color_choice) && i == 1
+          puts "You chose #{color_choice} as your second color."
+          code_array.push(color_choice)
+          p code_array
+          puts "Please choose your next color."
+          i += 1
+        elsif @choices.include?(color_choice) && i == 2
+          puts "You chose #{color_choice} as your third color."
+          code_array.push(color_choice)
+          p code_array
+          puts "Please choose your last color."
+          i += 1
+        elsif @choices.include?(color_choice) && i == 3
+          puts "You chose #{color_choice} as your last color."
+          code_array.push(color_choice)
+          p code_array
+          i += 1
+        else
+          puts "Please choose red, orange, yellow, green, blue or purple."
+        end
+      end
+      code_array
+    end
 end
 
 class CodemakerComputer < CodemakerHuman
@@ -251,4 +287,6 @@ class Gameboard
   end
 end
 
-game()
+##game()
+human = CodemakerHuman.new
+human.make_code_sequence()
